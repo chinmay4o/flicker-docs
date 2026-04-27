@@ -1,0 +1,20 @@
+extends layout.pug
+
+block content
+  main.page
+    article.prose
+      header.prose-header
+        p.eyebrow Playground
+        h1 Watch the CRDT do its thing
+      section
+        p.lede Two simulated peers, side by side. Drag the latency slider, drop packets, mash the keyboard. The document always converges.
+        .placeholder-card
+          p.placeholder-title Coming up next
+          p This page will host an interactive CRDT visualizer:
+          ul
+            li Two mini editors, each running its own CRDT instance
+            li A network simulator between them — adjustable latency and packet loss
+            li An internals overlay showing operation queues, fractional identifiers, and version vector state in real time
+            li An auto-chaos button that types random characters on both sides under whatever network conditions you set
+            li A convergence checksum — turns green when both sides match (which they always will)
+          p For now: open #[a.external(href='/') the editor] in two browser tabs to see the same algorithm running over real WebRTC.

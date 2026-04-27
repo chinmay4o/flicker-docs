@@ -1,0 +1,102 @@
+extends layout.pug
+
+block content
+  main.page
+    article.prose
+      header.prose-header
+        p.eyebrow How it works
+        h1 The shortest honest explanation
+      section
+        p.lede Flickerdocs is a real-time collaborative text editor with no central server, no database, and no AI in the loop. Two browsers connect directly, exchange edits over WebRTC, and merge them with a CRDT. This page explains how — at the level of detail an engineer would actually want, not at the level of a blog post.
+
+      section
+        h2 The shape of the system
+        p Three pieces, all in #[code lib/]:
+        dl.def-list
+          dt #[code identifier.js]
+          dd Generates a unique, totally ordered identifier for every character ever inserted. Identifiers are #[em fractional]: between any two existing IDs, a new one can always be created that sorts strictly between them. So inserting "between A and B" never requires renumbering the document.
+          dt #[code versionVector.js]
+          dd Tracks which operations from which peers each replica has already applied. When a remote operation arrives, the version vector decides: skip (already applied) or apply.
+          dt #[code crdt.js]
+          dd The document — a sorted structure of characters, each tagged with its identifier. Inserts are placed by ID; deletes are looked up by ID. Two replicas applying the same operations in any order land in the same state.
+        p That's it. The remaining files in #[code lib/] are plumbing — broadcasting messages, wrapping characters, wiring the editor.
+
+      section
+        h2 Why this converges
+        p A CRDT works because three properties hold for every operation:
+        ul
+          li #[strong Commutativity] — order doesn't matter. Apply A then B, or B then A: same result.
+          li #[strong Associativity] — grouping doesn't matter when batching ops.
+          li #[strong Idempotency] — applying the same op twice is the same as applying it once.
+        p Flickerdocs satisfies all three because every character has a globally unique identifier, every operation is keyed by that identifier, and the version vector skips duplicates. So peers can be offline, reconnect, replay history out of order, drop messages — and still converge. This property is sometimes called #[em strong eventual consistency], and it is mathematical, not heuristic.
+
+      section
+        h2 What a concurrent edit actually looks like
+        p Suppose two peers are connected to the same document. Their cursors are colored pills with animal names — say a #[span.peer-inline.peer-lemur Lemur] and a #[span.peer-inline.peer-hippo Hippopotamus]. Both have the document #[code "ab"].
+        p Internally, each character is tagged with a fractional identifier. Imagine #[code a] has ID #[code [(0.3, Lemur)]] and #[code b] has ID #[code [(0.7, Lemur)]] — both originally typed by Lemur.
+        p Now both peers, at the exact same moment, with no network communication between them, decide to insert a different character between #[code a] and #[code b]:
+        ul
+          li #[span.peer-inline.peer-lemur Lemur] inserts #[code X]. Their CRDT generates an identifier strictly between (0.3, Lemur) and (0.7, Lemur) — say #[code [(0.5, Lemur)]] — and broadcasts.
+          li #[span.peer-inline.peer-hippo Hippopotamus] inserts #[code Y]. Their CRDT generates an identifier between the same two — say #[code [(0.5, Hippopotamus)]] — and broadcasts.
+        p Two characters now exist with the "same" digit but different #[em siteIds] in the identifier. Identifier comparison breaks the tie deterministically using siteId. Both peers, regardless of which message arrives first, end up in the same state — say #[code "aXYb"] — because both peers run the same comparison. No coordinator. No serialization point. Just deterministic merging from the identifier scheme itself.
+        p This is the moment the CRDT earns its name.
+
+      section
+        h2 What it costs you
+        p Fractional identifiers grow. Every "insert between" operation produces an identifier at least as long as the longer of its two neighbors. Under adversarial edit patterns — like a thousand peers all hammering at the same position — IDs can balloon. The original Logoot benchmarks made this a publication-worthy problem.
+        p Flickerdocs uses a Logoot-family scheme without the LSEQ adaptive-allocation mitigation. For documents on the order of thousands of characters with single-digit peer counts, this is fine. For a real product at scale, it would not be.
+
+      section
+        h2 OT vs. CRDT, briefly
+        p Operational Transformation is the other approach to real-time collaborative editing. Google Docs uses it. The relevant difference for #[em this] project:
+        table.compare
+          thead
+            tr
+              th
+              th OT
+              th CRDT (this project)
+          tbody
+            tr
+              td Convergence guarantee
+              td Requires a central server to serialize ops
+              td Mathematical — peers converge without coordination
+            tr
+              td Offline editing
+              td Painful — divergent ops are tricky to transform
+              td Trivial — apply locally, sync when reconnected
+            tr
+              td Implementation tax
+              td Transformation functions are notoriously fragile
+              td Identifier scheme is the main complexity
+            tr
+              td Network model
+              td Centralized
+              td Peer-to-peer works directly
+        p For an editor with no auth, no server, and no infrastructure budget, CRDT was the only sensible answer.
+
+      section
+        h2 The papers behind this
+        ul.papers
+          li #[a.external(href='https://hal.inria.fr/inria-00555588' target='_blank' rel='noopener') Shapiro et al., 2011] — #[em "A comprehensive study of Convergent and Commutative Replicated Data Types."] The foundational survey. Gives you the convergence math for CvRDT and CmRDT and the language to talk about it.
+          li #[a.external(href='https://hal.inria.fr/inria-00432368' target='_blank' rel='noopener') Preguiça et al., 2009] — #[em "Logoot: A Scalable Optimistic Replication Algorithm for Collaborative Editing."] The original fractional-identifier paper for sequence CRDTs. The scheme this project uses is in this family.
+          li #[a.external(href='https://hal.archives-ouvertes.fr/hal-00921633' target='_blank' rel='noopener') Nédelec et al., 2013] — #[em "LSEQ: an Adaptive Structure for Sequences in Distributed Collaborative Editing."] Solves Logoot's identifier-growth problem with a smarter allocation strategy. Worth reading even if you don't implement it.
+
+      section
+        h2 What I'd build differently
+        p For a real product I'd reach for #[a.external(href='https://github.com/yjs/yjs' target='_blank' rel='noopener') Yjs]. Its tree-of-structs CRDT scales better than Logoot, handles binary content, integrates with rich text via ProseMirror or TipTap, and ships with a mature ecosystem. It's the right answer for almost any user-facing product.
+        p I built this project from scratch because I wanted to understand the primitives — not because I'd ship this exact code. Knowing the design space is more valuable than the code itself.
+
+      section
+        h2 Read the source
+        p All the CRDT logic — about 200 lines — lives in:
+        ul.file-list
+          li #[a.external(href='https://github.com/chinmay4o/flicker-docs-crdt/blob/main/lib/crdt.js' target='_blank' rel='noopener') #[code lib/crdt.js]] — document state, local + remote operation handlers
+          li #[a.external(href='https://github.com/chinmay4o/flicker-docs-crdt/blob/main/lib/identifier.js' target='_blank' rel='noopener') #[code lib/identifier.js]] — fractional identifier generation
+          li #[a.external(href='https://github.com/chinmay4o/flicker-docs-crdt/blob/main/lib/versionVector.js' target='_blank' rel='noopener') #[code lib/versionVector.js]] — causality tracking
+          li #[a.external(href='https://github.com/chinmay4o/flicker-docs-crdt/blob/main/lib/broadcast.js' target='_blank' rel='noopener') #[code lib/broadcast.js]] — WebRTC peer messaging
+          li #[a.external(href='https://github.com/chinmay4o/flicker-docs-crdt/blob/main/lib/char.js' target='_blank' rel='noopener') #[code lib/char.js]] — the character + identifier wrapper
+        p Read in that order to follow the dataflow.
+
+      section
+        p
+          a.cta-link(href='/playground') Try the playground →

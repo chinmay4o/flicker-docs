@@ -1,0 +1,49 @@
+extends layout.pug
+
+block content
+  main.page
+    article.prose
+      header.prose-header
+        p.eyebrow About
+        h1 The story behind Flickerdocs
+      section
+        p.lede I built this real-time collaborative editor without any framework, AI assist, or central server — just a CRDT and WebRTC.
+        p I wanted to code without a framework. To feel the code and the computer the way it was in the 1970s, when C and Unix were new and programs talked directly to the hardware. The interest is in zeros and ones — not the framework-of-the-month that everyone learns and then forgets where any of it came from.
+
+        h2 Who I am
+        p I'm Chinmay. I've built and sold a couple of startups, all in core tech. What I keep coming back to: robotics, hard systems problems, pure code.
+
+        h2 Why I built this
+        ul
+          li Reading distributed-systems papers is one thing. Building one is another.
+          li I wanted to understand CRDTs from primitives — not by reaching for Yjs.
+          li Real-time collaboration without a central server is one of the genuinely hard problems. Worth picking.
+
+        h2 What I learned
+        ul
+          li Version vectors track causality, not position. Position is what fractional identifiers do.
+          li Fractional identifiers + siteIds make concurrent inserts at the same position resolve deterministically — no coordinator needed.
+          li The math is the easy part. Making remote cursors glide smoothly while the doc underneath is being edited by someone else is the hard part.
+
+        h2 Tech stack
+        ul
+          li #[strong CRDT] — custom Logoot-family fractional identifiers + version vectors
+          li #[strong WebRTC] via PeerJS for peer-to-peer transport
+          li #[strong CodeMirror 5] as the editor surface
+          li #[strong Express] + Pug for serving + signaling
+          li #[strong Vanilla JS] — no React, no framework, no build assist
+
+        h2 The honest bit
+        p For a real product I'd reach for Yjs. I built this from scratch because I wanted to understand the primitives — not because I'd ship this exact code. Knowing the design space matters more than the code.
+
+        h2 Find me
+        ul.links-list
+          li GitHub: #[a.external(href='https://github.com/chinmay4o' target='_blank' rel='noopener') @chinmay4o]
+          li Twitter / X: #[a.external(href='https://twitter.com/chinmay4o' target='_blank' rel='noopener') @chinmay4o]
+          li LinkedIn: #[a.external(href='https://linkedin.com/in/chinmay4o' target='_blank' rel='noopener') /in/chinmay4o]
+          li Email: #[a.external(href='mailto:chinmayinbox8@gmail.com') chinmayinbox8@gmail.com]
+
+        h2 The repo
+        p Open source.
+        p
+          a.cta-link(href='https://github.com/chinmay4o/flicker-docs-crdt' target='_blank' rel='noopener') github.com/chinmay4o/flicker-docs-crdt ↗

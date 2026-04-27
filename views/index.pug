@@ -1,0 +1,38 @@
+extends layout.pug
+
+block content
+  p#safari Your browser doesn't support WebRTC.</br></br>Please use Chrome or Firefox desktop.
+  #flickerdocs.hide
+    .text-wrapper
+      .editor
+        .header
+          button.share-pill(type="button" aria-label="Copy share link")
+            span.share-pill-state.is-default
+              span Share link
+              i(data-feather="copy")
+            span.share-pill-state.is-copied
+              span Copied
+              i(data-feather="check")
+          //- hidden compat for controller: holds the share URL + click target
+          a.disappear(id='myLink')
+          span.disappear(id='myLinkInput')
+          span.disappear.copy-container
+          span.disappear.copy-status
+          button#download(type='button')
+            span.save-label Save
+            span.save-spinner(aria-hidden='true')
+          label#upload(for='file') Upload
+          input#file(type='file' accept='.txt, .js, .rb, .md')
+        #editor
+          textarea(row='10' col='20')
+      ul#peerId
+        li.peers-label Peers
+  .loading
+    .loading-inner
+      .loading-dot
+      .loading-dot
+      .loading-dot
+    p.loading-text Connecting peers…
+
+block scripts
+  script(src='/js/main.js')
