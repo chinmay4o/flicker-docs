@@ -864,7 +864,7 @@ main.page {
 }
 
 .prose-header {
-  margin-bottom: 56px;
+  margin-bottom: 40px;
 }
 
 .eyebrow {
@@ -878,8 +878,8 @@ main.page {
 }
 
 .prose h1 {
-  font-size: 38px;
-  line-height: 1.15;
+  font-size: 30px;
+  line-height: 1.2;
   letter-spacing: -0.02em;
   font-weight: 600;
   margin: 0 0 8px;
@@ -887,11 +887,11 @@ main.page {
 }
 
 .prose h2 {
-  font-size: 22px;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
+  font-size: 18px;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
   font-weight: 600;
-  margin: 56px 0 16px;
+  margin: 44px 0 14px;
   color: var(--text);
 }
 
@@ -1038,6 +1038,35 @@ main.page {
 
 .peer-lemur { background: rgb(186, 130, 255); }
 .peer-hippo { background: rgb(255, 168, 130); }
+.peer-rook  { background: rgb(206, 162, 245); }
+
+/* Inline figure for prose pages — image + small caption */
+.prose-figure {
+  margin: 32px 0 40px;
+}
+
+.prose-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  background: var(--surface);
+}
+
+.prose-figure figcaption {
+  margin-top: 12px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--muted);
+  text-align: center;
+  font-style: italic;
+}
+
+[data-theme="dark"] .prose-figure img {
+  border-color: var(--border-strong);
+}
 
 /* Lists: papers, files, links */
 .papers li, .file-list li, .links-list li {

@@ -9,6 +9,10 @@ block content
       section
         p.lede Flickerdocs is a real-time collaborative text editor with no central server, no database, and no AI in the loop. Two browsers connect directly, exchange edits over WebRTC, and merge them with a CRDT. This page explains how — at the level of detail an engineer would actually want, not at the level of a blog post.
 
+        figure.prose-figure
+          img(src='/images/editor.png' alt='Flickerdocs editor — empty document, share-link button, peer pill labelled "Rook"' loading='lazy')
+          figcaption The editor on first load — peers get an animal-name pill (here, #[span.peer-inline.peer-rook Rook]), share the URL, and start typing. Everything below is what makes the document on the right stay in sync with the document a continent away.
+
       section
         h2 The shape of the system
         p Three pieces, all in #[code lib/]:
