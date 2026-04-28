@@ -28,7 +28,7 @@ Three files do all the interesting work (in `lib/`):
 
 The scheme is in the Logoot family (fractional position identifiers). Convergence holds because every operation is keyed by a globally unique identifier and the version vector deduplicates. No coordinator required.
 
-Full writeup: [/how-it-works](/how-it-works)
+Full writeup on the `/how-it-works` page when running the app.
 
 ---
 
