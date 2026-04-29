@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # fly.toml app configuration file generated for flicker-docs on 2026-04-29T13:35:17Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
@@ -21,3 +22,23 @@ primary_region = 'lax'
   cpu_kind = 'shared'
   cpus = 1
   memory_mb = 256
+=======
+app = "flicker-docs"
+primary_region = "lax"
+
+[env]
+  PORT = "8080"
+
+[http_service]
+  auto_start_machines = true
+  auto_stop_machines = true
+  force_https = true
+  internal_port = 8080
+  min_machines_running = 0
+  processes = [ "app" ]
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "256mb"
+>>>>>>> 4e4178f (fly.toml config)
