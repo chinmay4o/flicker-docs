@@ -122,9 +122,9 @@ button {
    ========================================================= */
 
 .navbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   padding: 18px 32px;
   border-bottom: 1px solid var(--border);
   background-color: var(--bg);
@@ -134,11 +134,10 @@ button {
   backdrop-filter: saturate(180%) blur(8px);
 }
 
-.brand { display: inline-flex; align-items: center; }
-
 .brand {
   display: inline-flex;
   align-items: center;
+  justify-self: start;
 }
 
 .logo {
@@ -163,42 +162,55 @@ button {
 .nav-items {
   display: flex;
   gap: 20px;
+  justify-self: center;
 }
 
 .theme-toggle {
-  width: 36px;
-  height: 36px;
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 16px;
   border-radius: 999px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   background: var(--surface);
   color: var(--text-soft);
-  font-size: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-ui);
   cursor: pointer;
+  box-shadow: var(--shadow-md);
   transition: background-color 0.2s ease, border-color 0.2s ease,
-              transform 0.18s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.2s ease;
+              box-shadow 0.2s ease, color 0.2s ease;
 }
 
 .theme-toggle:hover {
-  background: var(--accent-soft);
+  background: var(--surface-elev);
   border-color: var(--accent);
   color: var(--accent);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px -4px var(--accent-soft);
+  box-shadow: 0 4px 20px -4px rgba(107, 158, 255, 0.3);
 }
 
 .theme-toggle:active {
-  transform: scale(0.92) translateY(-1px);
+  transform: translateX(-50%) scale(0.96);
   transition-duration: 0.05s;
 }
 
 .theme-toggle-icon {
   line-height: 1;
   display: inline-block;
+  font-size: 14px;
   transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-toggle-label {
+  font-size: 12px;
+  letter-spacing: 0.01em;
 }
 
 .theme-toggle:active .theme-toggle-icon {
@@ -1076,6 +1088,29 @@ main.page {
 .papers em { color: var(--text); font-style: italic; }
 
 /* Big external link / call-to-action */
+.inspiration-box {
+  margin: 32px 0;
+  padding: 18px 20px;
+  border-left: 3px solid var(--border-strong);
+  background: var(--surface);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.inspiration-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 6px 0;
+}
+
+.inspiration-box p:last-child {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 14px;
+}
+
 .cta-link {
   display: inline-flex;
   align-items: center;

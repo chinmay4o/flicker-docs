@@ -11,6 +11,8 @@ html(lang="en")
     link(rel='stylesheet' href='/css/style.css')
     link(rel='icon' href='/assets/img/favicon.svg' type='image/svg+xml')
     link(rel='shortcut icon' href='/assets/img/favicon.ico' type='image/x-icon')
+    script.
+      (function(){var t=localStorage.getItem('flickerdocs-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})();
   body(data-page=page)
     .navbar
       a.brand(href='/')
@@ -21,9 +23,10 @@ html(lang="en")
         a.nav-link(href='/how-it-works' class=(page === 'how-it-works' ? 'is-active' : '')) How it works
         a.nav-link(href='/about' class=(page === 'about' ? 'is-active' : '')) About
         a.nav-link.nav-link-external(href='https://github.com/chinmay4o/flicker-docs-crdt' target="_blank" rel="noopener") GitHub ↗
-      button.theme-toggle(type="button" aria-label="Toggle theme")
-        span.theme-toggle-icon ☀
     block content
+    button.theme-toggle(type="button" aria-label="Toggle theme")
+      span.theme-toggle-icon ☀
+      span.theme-toggle-label Light
     script(src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js")
     script.
       feather.replace({ 'stroke-width': 2 });
@@ -104,10 +107,12 @@ html(lang="en")
         document.addEventListener('DOMContentLoaded', function () {
           var btn = document.querySelector('.theme-toggle');
           var icon = btn && btn.querySelector('.theme-toggle-icon');
+          var label = btn && btn.querySelector('.theme-toggle-label');
 
           function syncIcon() {
             var dark = document.documentElement.getAttribute('data-theme') === 'dark';
             if (icon) icon.textContent = dark ? '☾' : '☀';
+            if (label) label.textContent = dark ? 'Dark' : 'Light';
           }
           syncIcon();
 
