@@ -12,7 +12,7 @@ html(lang="en")
     link(rel='icon' href='/assets/img/favicon.svg' type='image/svg+xml')
     link(rel='shortcut icon' href='/assets/img/favicon.ico' type='image/x-icon')
     script.
-      (function(){var t=localStorage.getItem('flickerdocs-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})();
+      (function(){var t=localStorage.getItem('flickerdocs-theme');if(t!=='light')document.documentElement.setAttribute('data-theme','dark');})();
   body(data-page=page)
     .navbar
       a.brand(href='/')
@@ -25,7 +25,7 @@ html(lang="en")
         a.nav-link.nav-link-external(href='https://github.com/chinmay4o/flicker-docs-crdt' target="_blank" rel="noopener") GitHub ↗
     block content
     button.theme-toggle(type="button" aria-label="Toggle theme")
-      span.theme-toggle-icon ☀
+      span.theme-toggle-icon ◐
       span.theme-toggle-label Light
     script(src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js")
     script.
@@ -102,7 +102,7 @@ html(lang="en")
       // ---------- Theme toggle with View Transitions + radial reveal + sound ----------
       (function () {
         var saved = localStorage.getItem('flickerdocs-theme');
-        if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        if (saved !== 'light') document.documentElement.setAttribute('data-theme', 'dark');
 
         document.addEventListener('DOMContentLoaded', function () {
           var btn = document.querySelector('.theme-toggle');
@@ -111,7 +111,7 @@ html(lang="en")
 
           function syncIcon() {
             var dark = document.documentElement.getAttribute('data-theme') === 'dark';
-            if (icon) icon.textContent = dark ? '☾' : '☀';
+            if (icon) icon.textContent = dark ? '◐' : '◑';
             if (label) label.textContent = dark ? 'Dark' : 'Light';
           }
           syncIcon();
