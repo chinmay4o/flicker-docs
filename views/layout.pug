@@ -10,7 +10,6 @@ html(lang="en")
     link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.18/lib/codemirror.min.css")
     link(rel='stylesheet' href='/css/style.css')
     link(rel='icon' href='/assets/img/favicon.svg' type='image/svg+xml')
-    link(rel='shortcut icon' href='/assets/img/favicon.ico' type='image/x-icon')
     script.
       (function(){var t=localStorage.getItem('flickerdocs-theme');if(t!=='light')document.documentElement.setAttribute('data-theme','dark');})();
   body(data-page=page)
@@ -22,7 +21,7 @@ html(lang="en")
         a.nav-link(href='/playground' class=(page === 'playground' ? 'is-active' : '')) Playground
         a.nav-link(href='/how-it-works' class=(page === 'how-it-works' ? 'is-active' : '')) How it works
         a.nav-link(href='/about' class=(page === 'about' ? 'is-active' : '')) About
-        a.nav-link.nav-link-external(href='https://github.com/chinmay4o/flicker-docs-crdt' target="_blank" rel="noopener") GitHub ↗
+        a.nav-link.nav-link-external(href='https://github.com/chinmay4o/flicker-docs' target="_blank" rel="noopener") GitHub ↗
     block content
     button.theme-toggle(type="button" aria-label="Toggle theme")
       span.theme-toggle-icon ◐
